@@ -16,15 +16,15 @@ import warnings
 warnings.filterwarnings("ignore")
 
 print("="*80)
-print("SIMPLIFIED MULTI-AGENT STACKING ENSEMBLE (FIXED)")
+print("SIMPLIFIED MULTI-Model STACKING ENSEMBLE (FIXED)")
 print("="*80)
 
 # =====================================================
 # 1. LOAD AGENT OUTPUTS WITH VALIDATION
 # =====================================================
-print("\n[1/6] Loading agent outputs...")
+print("\n[1/6] Loading Model outputs...")
 
-def validate_agent_output(agent, agent_name):
+def validate_Model_output(model, model_name):
     """Validate agent output structure and data quality"""
     required_splits = ["train", "val", "test"]
     required_keys = ["raw_proba", "raw_pred"]
@@ -49,23 +49,23 @@ def validate_agent_output(agent, agent_name):
             if key == "raw_pred" and not np.all(np.isin(data, [0, 1])):
                 raise ValueError(f"{agent_name}['{split}']['raw_pred'] contains non-binary values")
     
-    print(f"  ✅ {agent_name} validation passed")
+    print(f"  ✅ {model_name} validation passed")
 
 try:
-    agent1 = pickle.load(open("/content/models/agent1_outputs.pkl", "rb"))
-    agent2 = pickle.load(open("/content/models/agent2_outputs.pkl", "rb"))
-    agent3 = pickle.load(open("/content/models/agent3_outputs.pkl", "rb"))
-    agent4 = pickle.load(open("/content/models/agent4_outputs.pkl", "rb"))
+    agent1 = pickle.load(open("/content/models/model1_outputs.pkl", "rb"))
+    agent2 = pickle.load(open("/content/models/model2_outputs.pkl", "rb"))
+    agent3 = pickle.load(open("/content/models/model3_outputs.pkl", "rb"))
+    agent4 = pickle.load(open("/content/models/model4_outputs.pkl", "rb"))
     
     train_df = pickle.load(open("train.pkl", "rb"))
     val_df   = pickle.load(open("val.pkl", "rb"))
     test_df  = pickle.load(open("test.pkl", "rb"))
     
     print("\n  Validating agent outputs...")
-    validate_agent_output(agent1, "Agent1")
-    validate_agent_output(agent2, "Agent2")
-    validate_agent_output(agent3, "Agent3")
-    validate_agent_output(agent4, "Agent4")
+    validate_agent_output(model1, "Model1")
+    validate_agent_output(model2, "Model2")
+    validate_agent_output(model3, "Model3")
+    validate_agent_output(model4, "Model4")
     
 except FileNotFoundError as e:
     print(f"\n❌ ERROR: Required file not found - {e}")
@@ -101,7 +101,7 @@ def create_features(split):
     # Validate shape consistency
     lengths = [len(p1), len(p2), len(p3), len(p4)]
     if len(set(lengths)) != 1:
-        raise ValueError(f"Agent output lengths don't match for {split}: {lengths}")
+        raise ValueError(f"Model output lengths don't match for {split}: {lengths}")
 
     features = np.column_stack([
         # Predictions (4 features)
