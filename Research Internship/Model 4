@@ -1,5 +1,5 @@
 """
-Model 4: Advanced Credibility Scoring Agent (MEMORY-SAFE AGENTIC VERSION)
+Model 4: Advanced Credibility Scoring Model 
 Target: 90%+ Accuracy WITHOUT OOM in Colab
 - Chunked processing with aggressive garbage collection
 - Smart memory management for spaCy NER
@@ -22,7 +22,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 print("=" * 70)
-print("AGENT 4: CREDIBILITY SCORING (MEMORY-SAFE AGENTIC)")
+print("Model 4: CREDIBILITY SCORING")
 print("Target: 90%+ Accuracy + No OOM in Colab")
 print("=" * 70)
 
@@ -369,7 +369,7 @@ train_scaled = pd.DataFrame(scaler.fit_transform(train_features), columns=train_
 val_scaled = pd.DataFrame(scaler.transform(val_features), columns=train_features.columns)
 test_scaled = pd.DataFrame(scaler.transform(test_features), columns=train_features.columns)
 
-with open('/content/models/agent4_scaler.pkl', 'wb') as f:
+with open('/content/models/model4_scaler.pkl', 'wb') as f:
     pickle.dump(scaler, f)
 print("✓ Scaler saved")
 gc.collect()
@@ -414,7 +414,7 @@ print("✓ Model trained")
 gc.collect()
 
 # ============================================================================
-# Generate Agentic Outputs - CHUNKED
+# Generate Model Outputs - CHUNKED
 # ============================================================================
 print("\n[7/7] Generating reasoning (chunked)...")
 
@@ -496,7 +496,7 @@ val_auc = roc_auc_score(val_labels, val_proba)
 test_auc = roc_auc_score(test_labels, test_proba)
 
 print(f"\n{'='*70}")
-print(f"AGENT 4 PERFORMANCE")
+print(f"Model 4 PERFORMANCE")
 print(f"{'='*70}")
 print(f"\nAccuracy:")
 print(f"  Train: {train_acc*100:.2f}%")
@@ -509,17 +509,17 @@ print(f"  Test:  {test_auc:.4f}")
 print(classification_report(test_labels, test_pred, target_names=['Fake', 'Real']))
 
 # Save
-with open('/content/models/agent4_model.pkl', 'wb') as f:
+with open('/content/models/model4_model.pkl', 'wb') as f:
     pickle.dump(model, f)
 
-agent4_outputs = {
+model4_outputs = {
     'train': {'decisions': train_decisions, 'raw_proba': train_proba.astype(np.float32), 'raw_pred': train_pred.astype(np.int8)},
     'val': {'decisions': val_decisions, 'raw_proba': val_proba.astype(np.float32), 'raw_pred': val_pred.astype(np.int8)},
     'test': {'decisions': test_decisions, 'raw_proba': test_proba.astype(np.float32), 'raw_pred': test_pred.astype(np.int8)},
     'feature_names': list(train_features.columns)
 }
 
-with open('/content/models/agent4_outputs.pkl', 'wb') as f:
+with open('/content/models/model4_outputs.pkl', 'wb') as f:
     pickle.dump(agent4_outputs, f)
 
 print("\n✅ COMPLETE! Target: 90%+, Actual: {test_acc*100:.2f}%")
