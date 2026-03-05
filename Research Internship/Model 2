@@ -23,7 +23,7 @@ import textstat
 import re
 
 print("=" * 60)
-print("AGENT 2: ADVANCED LINGUISTIC ANALYSIS (AGENTIC)")
+print("MODEL 2: ADVANCED LINGUISTIC ANALYSIS (AGENTIC)")
 print("=" * 60)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -427,11 +427,11 @@ for epoch in range(num_epochs):
 model.load_state_dict(torch.load('/content/models/agent2_model.pth', weights_only=True))
 
 # ============================================================================
-# Generate Reasoning-Based Outputs (AGENTIC)
+# Generate Reasoning-Based Outputs 
 # ============================================================================
 print("\n[8/8] Generating reasoning-based decisions...")
 
-def generate_agent_reasoning(features_df, probabilities, predictions, feature_names):
+def generate_model_reasoning(features_df, probabilities, predictions, feature_names):
     """Generate structured reasoning for each decision"""
     decisions = []
 
@@ -475,7 +475,7 @@ def generate_agent_reasoning(features_df, probabilities, predictions, feature_na
             'decision': 'REAL' if pred == 1 else 'FAKE',
             'confidence': float(proba if pred == 1 else 1 - proba),
             'reasoning': {
-                'agent_name': 'Linguistic Analysis Agent',
+                'model_name': 'Linguistic Analysis Model',
                 'primary_factors': linguistic_signals,
                 'feature_summary': {
                     'flesch_reading_ease': float(features['flesch_reading_ease']),
@@ -517,7 +517,7 @@ train_acc = accuracy_score(train_labels, train_pred)
 val_acc = accuracy_score(val_labels, val_pred)
 test_acc = accuracy_score(test_labels, test_pred)
 
-print(f"\n📊 Agent 2 Performance (for reference):")
+print(f"\n📊 Model 2 Performance (for reference):")
 print(f"  Train: {train_acc*100:.2f}%")
 print(f"  Val:   {val_acc*100:.2f}%")
 print(f"  Test:  {test_acc*100:.2f}%")
@@ -526,7 +526,7 @@ print(f"\n📋 Classification Report:")
 print(classification_report(test_labels, test_pred, target_names=['Fake', 'Real']))
 
 # Save agentic outputs
-agent2_outputs = {
+model2_outputs = {
     'train': {
         'decisions': train_decisions,
         'features': train_features_scaled,
@@ -550,30 +550,30 @@ agent2_outputs = {
     }
 }
 
-with open('/content/models/agent2_outputs.pkl', 'wb') as f:
+with open('/content/models/model2_outputs.pkl', 'wb') as f:
     pickle.dump(agent2_outputs, f)
 
-print("\n✓ Model saved to '/content/models/agent2_model.pth'")
-print("✓ Agentic outputs saved to '/content/models/agent2_outputs.pkl'")
+print("\n✓ Model saved to '/content/models/model2_model.pth'")
+print("✓ Model outputs saved to '/content/models/model2_outputs.pkl'")
 
 # Sample reasoning
 print("\n" + "="*70)
-print("📝 SAMPLE AGENT 2 REASONING (First 3 test samples):")
+print("📝 SAMPLE Model 2 REASONING (First 3 test samples):")
 print("="*70)
 for i in range(min(3, len(test_decisions))):
     dec = test_decisions[i]
     actual = "REAL" if test_labels[i] == 1 else "FAKE"
     print(f"\nSample {i+1}:")
-    print(f"  Agent Decision: {dec['decision']} (Confidence: {dec['confidence']:.2%})")
+    print(f"  Model Decision: {dec['decision']} (Confidence: {dec['confidence']:.2%})")
     print(f"  Actual Label: {actual}")
     print(f"  Reasoning: {dec['reasoning']['reasoning_text']}")
     print(f"  Key Factors: {list(dec['reasoning']['primary_factors'].keys())}")
 
 print("\n" + "=" * 60)
-print("✅ AGENT 2 (AGENTIC) TRAINING COMPLETE!")
+print("✅ Model 2  TRAINING COMPLETE!")
 print("=" * 60)
 print(f"\n📈 Summary:")
-print(f"  • Agent Type: Linguistic Analysis")
+print(f"  • Model Type: Linguistic Analysis")
 print(f"  • Output Format: Structured decisions with reasoning")
 print(f"  • Total Features: ~75 linguistic features")
 print(f"  • Architecture: 256→128→64→1")
