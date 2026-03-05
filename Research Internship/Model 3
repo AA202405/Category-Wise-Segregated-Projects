@@ -48,7 +48,7 @@ def verify_checkpoint(filepath):
     return False
 
 print("="*60)
-print("AGENT 3: PURE BERT + INTERPRETABLE REASONING (FIXED)")
+print("Model 3: PURE BERT + INTERPRETABLE REASONING (FIXED)")
 print("="*60)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -257,7 +257,7 @@ def evaluate_model(model, dataloader, device):
 
 print("\n[5/7] Training Pure BERT...")
 
-checkpoint_path = os.path.join(SAVE_DIR, 'agent3_best.pth')
+checkpoint_path = os.path.join(SAVE_DIR, 'model3_best.pth')
 start_epoch = 0
 best_val_acc = 0
 
@@ -333,14 +333,14 @@ for epoch in range(start_epoch, num_epochs):
     print(f"  Gap (Train-Val): {abs(train_acc - val_acc)*100:.2f}%")
 
     save_checkpoint(model, optimizer, scheduler, epoch, train_acc, val_acc,
-                    f'agent3_epoch_{epoch+1}.pth')
+                    f'model3_epoch_{epoch+1}.pth')
 
     if val_acc > best_val_acc:
         best_val_acc = val_acc
         patience_counter = 0
         torch.save(model.state_dict(), os.path.join(SAVE_DIR, 'agent3_pure_bert_best.pth'))
         save_checkpoint(model, optimizer, scheduler, epoch, train_acc, val_acc,
-                        'agent3_best.pth')
+                        'model3_best.pth')
         print(f"  ✅ NEW BEST MODEL! Val Acc: {val_acc*100:.2f}%")
     else:
         patience_counter += 1
@@ -356,7 +356,7 @@ for epoch in range(start_epoch, num_epochs):
 # ============================================================================#
 
 print("\n[6/7] Loading best model for final evaluation...")
-best_model_path = os.path.join(SAVE_DIR, 'agent3_pure_bert_best.pth')
+best_model_path = os.path.join(SAVE_DIR, 'model3_pure_bert_best.pth')
 model.load_state_dict(torch.load(best_model_path))
 print(f"✓ Best model loaded (Val Acc: {best_val_acc*100:.2f}%)")
 
@@ -390,7 +390,7 @@ train_acc_final = accuracy_score(train_df['label'].values, train_preds)
 val_acc_final = accuracy_score(val_df['label'].values, val_preds)
 test_acc_final = accuracy_score(test_df['label'].values, test_preds)
 
-# (agentic reasoning + saving outputs sections remain the same, just reuse train_probas/train_preds, etc.)
+
 
 
 print("\n" + "="*70)
