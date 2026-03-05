@@ -1,5 +1,5 @@
 """
-STEP 1: Data Preprocessing for WELFake Dataset (RESEARCH-GRADE VERSION)
+STEP 1: Data Preprocessing for WELFake Dataset
 This script loads, cleans, and prepares data for Agent 1 training
 Addresses: emoji preservation, label handling, duplicate detection, and more
 """
@@ -281,12 +281,7 @@ if duplicates_removed > 0:
 print(f"\n  ✓ Processed: {len(df_processed)} valid samples")
 print(f"  ✓ Total removed: {initial_count - len(df_processed)} ({(initial_count - len(df_processed))/initial_count*100:.1f}%)")
 
-# ============================================================================
-# Calculate statistics AFTER all filtering - CRITICAL FIX
-# ============================================================================
-# ============================================================================
-# Calculate statistics AFTER all filtering - CRITICAL FIX
-# ============================================================================
+
 # Check if we have any data left after filtering
 if len(df_processed) == 0:
     print("\n✗ ERROR: No data remaining after filtering!")
@@ -509,26 +504,3 @@ for idx in range(min(3, len(train_df))):
 
     print(f"\n[{idx+1}] Label: {label_text} | Words: {word_count} | Emoji: {has_emoji} | Special: {has_special}")
     print(f"    {text_preview}")
-
-print("\n" + "=" * 60)
-print("✅ RESEARCH-GRADE PREPROCESSING COMPLETE!")
-print("=" * 60)
-print("\n📊 Key Features:")
-print("  ✓ Preserved emojis, hashtags, special characters")
-print("  ✓ Lowered threshold to 20 chars (catches sensational headlines)")
-print("  ✓ Removed conflicting labels (same text, different labels)")
-print("  ✓ Removed exact duplicates after conflict removal")
-print("  ✓ Robust label handling (int + expanded vocabulary)")
-print("  ✓ Content-based leakage detection")
-print("  ✓ Stratified splitting with fallback")
-print("  ✓ Comprehensive metadata tracking")
-print("  ✓ IMPROVED: Accurate counting at each filtering step")
-print("  ✓ IMPROVED: Statistics calculated after all filtering")
-print("  ✓ IMPROVED: Kept only necessary columns for training")
-print("\n📁 Files saved:")
-print(f"  {OUTPUT_DIR}/train.pkl ({len(train_df)} samples)")
-print(f"  {OUTPUT_DIR}/val.pkl ({len(val_df)} samples)")
-print(f"  {OUTPUT_DIR}/test.pkl ({len(test_df)} samples)")
-print(f"  {OUTPUT_DIR}/combined_data.pkl ({len(df_processed)} samples)")
-print(f"  {OUTPUT_DIR}/metadata.pkl")
-print("\n" + "=" * 60)
