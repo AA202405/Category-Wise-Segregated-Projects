@@ -1,5 +1,5 @@
 """
-AGENT 2: Advanced Linguistic Analysis Agent (True Agentic Architecture)
+Model 2: Advanced Linguistic Analysis Agent (True Agentic Architecture)
 Provides reasoning and confidence, NOT final predictions
 Outputs structured decisions for Coordinator-led debate
 """
