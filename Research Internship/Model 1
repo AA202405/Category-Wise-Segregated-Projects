@@ -1,5 +1,5 @@
 """
-Model 1: Stylistic Analysis Agent (True Agentic Architecture)
+Model 1: Stylistic Analysis module
 Provides reasoning and confidence, NOT final predictions
 Outputs structured decisions for Coordinator-led debate
 """
@@ -19,7 +19,7 @@ import textstat
 from tqdm import tqdm
 
 print("=" * 60)
-print("AGENT 1: STYLISTIC ANALYSIS AGENT (AGENTIC)")
+print("Model 1: STYLISTIC ANALYSIS Module")
 print("=" * 60)
 
 # ============================================================================
@@ -58,7 +58,7 @@ print("\n[2/6] Defining enhanced feature extraction functions...")
 
 def extract_enhanced_stylistic_features(text):
     """
-    Agent 1: PURE STYLISTIC FEATURES ONLY
+    Model 1: PURE STYLISTIC FEATURES ONLY
     Extracts stylistic features for fake news detection
     """
     features = {}
@@ -206,11 +206,11 @@ model.fit(train_features, train_labels, eval_set=eval_set, verbose=20)
 print("✓ Training complete!")
 
 # ============================================================================
-# Generate Reasoning-Based Outputs (AGENTIC ARCHITECTURE)
+# Generate Reasoning-Based Outputs 
 # ============================================================================
 print("\n[5/6] Generating reasoning-based decisions for Coordinator...")
 
-def generate_agent_reasoning(features_df, probabilities, predictions, feature_names):
+def generate_model_reasoning(features_df, probabilities, predictions, feature_names):
     """
     Generate structured reasoning for each decision
     Format: {"decision": "FAKE/REAL", "confidence": 0.XX, "reasoning": {...}}
@@ -276,20 +276,20 @@ train_pred = model.predict(train_features)
 val_pred = model.predict(val_features)
 test_pred = model.predict(test_features)
 
-train_decisions = generate_agent_reasoning(train_features, train_proba, train_pred, train_features.columns)
-val_decisions = generate_agent_reasoning(val_features, val_proba, val_pred, val_features.columns)
-test_decisions = generate_agent_reasoning(test_features, test_proba, test_pred, test_features.columns)
+train_decisions = generate_model_reasoning(train_features, train_proba, train_pred, train_features.columns)
+val_decisions = generate_model_reasoning(val_features, val_proba, val_pred, val_features.columns)
+test_decisions = generate_model_reasoning(test_features, test_proba, test_pred, test_features.columns)
 
 # ============================================================================
 # Evaluate and Save
 # ============================================================================
-print("\n[6/6] Evaluating and saving agent outputs...")
+print("\n[6/6] Evaluating and saving model outputs...")
 
 train_acc = accuracy_score(train_labels, train_pred)
 val_acc = accuracy_score(val_labels, val_pred)
 test_acc = accuracy_score(test_labels, test_pred)
 
-print(f"\n📊 Agent 1 Performance (for reference only):")
+print(f"\n📊modle 1 Performance (for reference only):")
 print(f"  Train Accuracy: {train_acc*100:.2f}%")
 print(f"  Val Accuracy:   {val_acc*100:.2f}%")
 print(f"  Test Accuracy:  {test_acc*100:.2f}%")
@@ -306,10 +306,10 @@ feature_importance = pd.DataFrame({
 print(feature_importance.head(10).to_string(index=False))
 
 # Save model
-with open('/content/models/agent1_model.pkl', 'wb') as f:
+with open('/content/models/model1_model.pkl', 'wb') as f:
     pickle.dump(model, f)
 
-# Save AGENTIC outputs for Coordinator
+# Save Model outputs for Coordinator
 agent1_outputs = {
     'train': {
         'decisions': train_decisions,
@@ -334,31 +334,21 @@ agent1_outputs = {
     }
 }
 
-with open('/content/models/agent1_outputs.pkl', 'wb') as f:
-    pickle.dump(agent1_outputs, f)
+with open('/content/models/model1_outputs.pkl', 'wb') as f:
+    pickle.dump(model1_outputs, f)
 
-print("\n✓ Model saved to '/content/models/agent1_model.pkl'")
-print("✓ Agentic outputs saved to '/content/models/agent1_outputs.pkl'")
+print("\n✓ Model saved to '/content/models/model1_model.pkl'")
+print("✓ model outputs saved to '/content/models/model1_outputs.pkl'")
 
 # Display sample reasoning
 print("\n" + "="*70)
-print("📝 SAMPLE AGENT 1 REASONING (First 3 test samples):")
+print("📝 SAMPLE model 1 REASONING (First 3 test samples):")
 print("="*70)
 for i in range(min(3, len(test_decisions))):
     dec = test_decisions[i]
     actual = "REAL" if test_labels[i] == 1 else "FAKE"
     print(f"\nSample {i+1}:")
-    print(f"  Agent Decision: {dec['decision']} (Confidence: {dec['confidence']:.2%})")
+    print(f"  model Decision: {dec['decision']} (Confidence: {dec['confidence']:.2%})")
     print(f"  Actual Label: {actual}")
     print(f"  Reasoning: {dec['reasoning']['reasoning_text']}")
     print(f"  Key Factors: {list(dec['reasoning']['primary_factors'].keys())}")
-
-print("\n" + "=" * 60)
-print("✅ AGENT 1 (AGENTIC) TRAINING COMPLETE!")
-print("=" * 60)
-print(f"\n📈 Summary:")
-print(f"  • Agent Type: Stylistic Analysis")
-print(f"  • Output Format: Structured decisions with reasoning")
-print(f"  • Total Features: {len(sample_features)}")
-print(f"  • Ready for Coordinator integration")
-print(f"  • Supports debate via detailed feature explanations")
