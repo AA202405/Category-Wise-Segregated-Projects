@@ -1,0 +1,65 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+df = pd.read_csv("Ecommerce Customers.csv")
+df.head()
+df.info
+df.describe()
+
+#EDA
+sns.jointplot(x = "Time on Website", y = "Yearly Amount Spent", data = df)
+sns.jointplot(x = "Time on App", y = "Yearly Amount Spent", data = df)
+sns.pairplot(df, kind="scatter", plot_kws={'alpha': 0.4})
+sns.lmplot(x='Length of Membership',
+           y='Yearly Amount Spent',
+           data=df,
+           scatter_kws={'alpha': 0.3})
+from sklearn.model_selection import train_test_split
+print(df.columns)
+
+X = df[['Time on App', 'Time on Website','Length of Membership','Avg. Session Length']]
+Y = df['Yearly Amount Spent']
+X_train,X_test,Y_train,Y_test = train_test_split(X,Y,test_size =0.3,random_state=42)
+X_train
+X_test
+
+#training the model
+from sklearn.linear_model import LinearRegression
+lm = LinearRegression()
+lm.fit(X_train,Y_train)
+lm.coef_
+lm.score(X,Y)
+cdf = pd.DataFrame(lm.coef_,X.columns,columns=['Coef'])
+print(cdf)
+import statsmodels.api as sm
+
+X = sm.add_constant(X_train)             # ✅ Add intercept term
+model = sm.OLS(Y_train, X)               # ✅ OLS from statsmodels
+model_fit = model.fit()
+print(model_fit.summary())               # ✅ Beautiful regression output
+
+
+#Predictions
+predictions = lm.predict(X_test)
+sns.scatterplot(x=predictions, y=Y_test)
+plt.xlabel("Predictions")
+plt.ylabel("Actual Values")
+plt.title("Evaluation of Linear Regression Model")
+plt.grid(True)
+plt.show()
+
+from sklearn.metrics import mean_squared_error , mean_absolute_error
+import math
+print("Mean Absolute Error:",mean_absolute_error(Y_test,predictions))
+print("Mean Squared Error:",mean_squared_error(Y_test,predictions))
+print("Root Mean Absolute Error:",math.sqrt(mean_absolute_error(Y_test,predictions)))
+
+#residuals
+residuals=Y_test-predictions
+residuals
+sns.displot(residuals,bins=20,kde=True)
+import pylab
+import scipy.stats as stats
+
+stats.probplot(residuals,dist= "norm",plot = pylab)
+pylab.show
